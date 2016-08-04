@@ -4,11 +4,11 @@ defmodule CodeCorps.OrganizationControllerTest do
   alias CodeCorps.Organization
   alias CodeCorps.Repo
 
-  @valid_attrs %{description: "some content", name: "some content", slug: "some content"}
+  @valid_attrs %{description: "Build a better future.", name: "Code Corps", slug: "code-corps"}
   @invalid_attrs %{}
 
   setup do
-    conn = conn()
+    conn = %{build_conn | host: "api."}
       |> put_req_header("accept", "application/vnd.api+json")
       |> put_req_header("content-type", "application/vnd.api+json")
 
@@ -37,7 +37,7 @@ defmodule CodeCorps.OrganizationControllerTest do
 
   test "does not show resource and instead throw error when id is nonexistent", %{conn: conn} do
     assert_error_sent 404, fn ->
-      get conn, organization_path(conn, :show, -1)
+      get conn, user_path(conn, :show, -1)
     end
   end
 
