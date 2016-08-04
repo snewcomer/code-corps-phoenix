@@ -15,6 +15,6 @@ defmodule CodeCorps.Organization do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name, :description, :slug])
-    |> validate_required([:name, :description, :slug])
+    |> validate_required([:name, :slug])
   end
 end

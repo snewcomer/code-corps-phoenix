@@ -2,9 +2,10 @@ defmodule CodeCorps.SluggedRoute do
   use CodeCorps.Web, :model
 
   schema "slugged_routes" do
+    belongs_to :organization, CodeCorps.Organization
+    belongs_to :user, CodeCorps.User
+
     field :slug, :string
-    field :organization_id, :integer
-    field :user_id, :integer
 
     timestamps()
   end
@@ -14,7 +15,21 @@ defmodule CodeCorps.SluggedRoute do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:slug, :organization_id, :user_id])
-    |> validate_required([:slug, :organization_id, :user_id])
+    |> cast(params, [:slug])
+    |> validate_required(:slug)
+  end
+
+  def organization_changeset(struct, params \\ %{}) do
+    struct
+    |> changeset(params)
+    |> cast(params, [:organization_id])
+    |> validate_required(:organization_id)
+  end
+
+  def user_changeset(struct, params \\ %{}) do
+    struct
+    |> changeset(params)
+    |> cast(params, [:user_id])
+    |> validate_required(:user_id)
   end
 end
