@@ -3,11 +3,17 @@ defmodule CodeCorps.SluggedRouteTest do
 
   alias CodeCorps.SluggedRoute
 
-  @valid_attrs %{organization_id: 42, slug: "some content", user_id: 42}
+  @valid_organization_attrs %{slug: "organization-slug", organization_id: 1}
+  @valid_user_attrs %{slug: "user-slug", user_id: 1}
   @invalid_attrs %{}
 
-  test "changeset with valid attributes" do
-    changeset = SluggedRoute.changeset(%SluggedRoute{}, @valid_attrs)
+  test "organization changeset with valid organization attributes" do
+    changeset = SluggedRoute.organization_changeset(%SluggedRoute{}, @valid_organization_attrs)
+    assert changeset.valid?
+  end
+
+  test "user changeset with valid user attributes" do
+    changeset = SluggedRoute.user_changeset(%SluggedRoute{}, @valid_user_attrs)
     assert changeset.valid?
   end
 
