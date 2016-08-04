@@ -4,104 +4,138 @@ defmodule CodeCorps.Validators.SlugValidatorTest do
   import CodeCorps.Validators.SlugValidator
 
   test "with only letters" do
-    changeset = cast_slug("testslug") # can't be `slug` because reserved
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "testslug" # can't be `slug` because reserved
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
-  test "with preceding underscores" do
-    changeset = cast_slug("_slug")
-    changeset = validate_slug(changeset, :slug)
+  test "with prefixed underscores" do
+    changeset =
+      "_slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
   test "with suffixed underscores" do
-    changeset = cast_slug("slug_")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug_"
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
-  test "with preceding numbers" do
-    changeset = cast_slug("123slug")
-    changeset = validate_slug(changeset, :slug)
+  test "with prefixed numbers" do
+    changeset =
+      "123slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
   test "with suffixed numbers" do
-    changeset = cast_slug("slug123")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug123"
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
   test "with multiple dashes" do
-    changeset = cast_slug("slug-slug-slug")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug-slug-slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
   test "with multiple underscores" do
-    changeset = cast_slug("slug_slug_slug")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug_slug_slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
   test "with multiple consecutive underscores" do
-    changeset = cast_slug("slug___slug")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug___slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
   test "with one character" do
-    changeset = cast_slug("s")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "s"
+      |> cast_slug
+      |> validate_slug(:slug)
     assert changeset.valid?
   end
 
-  test "with preceding symbols" do
-    changeset = cast_slug("@slug")
-    changeset = validate_slug(changeset, :slug)
+  test "with prefixed symbols" do
+    changeset =
+      "@slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     refute changeset.valid?
   end
 
-  test "with preceding dashes" do
-    changeset = cast_slug("-slug")
-    changeset = validate_slug(changeset, :slug)
+  test "with prefixed dashes" do
+    changeset =
+      "-slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     refute changeset.valid?
   end
 
   test "with suffixed dashes" do
-    changeset = cast_slug("slug-")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug-"
+      |> cast_slug
+      |> validate_slug(:slug)
     refute changeset.valid?
   end
 
   test "with multiple consecutive dashes" do
-    changeset = cast_slug("slug---slug")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug---slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     refute changeset.valid?
   end
 
-  test "with single salshes" do
-    changeset = cast_slug("slug/slug")
-    changeset = validate_slug(changeset, :slug)
+  test "with single slashes" do
+    changeset =
+      "slug/slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     refute changeset.valid?
   end
 
   test "with multiple slashes" do
-    changeset = cast_slug("slug/slug/slug")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug/slug/slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     refute changeset.valid?
   end
 
   test "with multiple consecutive slashes" do
-    changeset = cast_slug("slug///slug")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "slug///slug"
+      |> cast_slug
+      |> validate_slug(:slug)
     refute changeset.valid?
   end
 
   test "with reserved routes" do
-    changeset = cast_slug("about")
-    changeset = validate_slug(changeset, :slug)
+    changeset =
+      "about"
+      |> cast_slug
+      |> validate_slug(:slug)
     refute changeset.valid?
   end
 
