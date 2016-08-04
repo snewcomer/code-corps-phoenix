@@ -20,11 +20,12 @@ defmodule CodeCorps.SluggedRouteControllerTest do
   end
 
   test "shows chosen resource", %{conn: conn} do
-    slugged_route = Repo.insert! %SluggedRoute{}
-    conn = get conn, slugged_route_path(conn, :show, slugged_route)
+    slug = "test-slug"
+    slugged_route = Repo.insert! %SluggedRoute{slug: slug}
+    conn = get conn, "/#{slug}"
     data = json_response(conn, 200)["data"]
     assert data["id"] == "#{slugged_route.id}"
-    assert data["type"] == "slugged_route"
+    assert data["type"] == "slugged-route"
     assert data["attributes"]["slug"] == slugged_route.slug
     assert data["attributes"]["organization_id"] == slugged_route.organization_id
     assert data["attributes"]["user_id"] == slugged_route.user_id
