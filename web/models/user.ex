@@ -32,6 +32,18 @@ defmodule CodeCorps.User do
     |> put_pass_hash()
   end
 
+  def check_email_availability(email) do
+    %{}
+    |> check_email_valid(email)
+    |> check_used(:email, email)
+  end
+
+  def check_username_availability(username) do
+    %{}
+    |> check_username_valid(username)
+    |> check_used(:username, username)
+  end
+
   defp put_pass_hash(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
@@ -39,5 +51,20 @@ defmodule CodeCorps.User do
       _ ->
         changeset
     end
+  end
+
+  defp check_email_valid(struct, email) do
+    put_in struct[:valid], Regex.match?(~r/@/, email)
+  end
+
+  defp check_username_valid(struct, username) do
+    put_in struct[:valid], String.length(username) >= 1 && String.length(username) <= 39
+  end
+
+  defp check_used(struct, column, value) do
+    query = from u in "users", where: field(u, ^column) == ^value, select: field(u, ^column)
+    available = CodeCorps.Repo.all(query) |> Enum.empty?
+
+    put_in struct[:available], CodeCorps.Repo.all(query) |> Enum.empty?
   end
 end
