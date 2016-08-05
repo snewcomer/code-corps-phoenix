@@ -7,6 +7,13 @@ defmodule CodeCorps.User do
     field :password, :string, virtual: true
     field :encrypted_password, :string
 
+    field :first_name, :string
+    field :last_name, :string
+
+    field :twitter, :string
+    field :biography, :string
+    field :website, :string
+
     timestamps()
   end
 
@@ -30,6 +37,14 @@ defmodule CodeCorps.User do
     |> validate_required(:password)
     |> validate_length(:password, min: 6)
     |> put_pass_hash()
+  end
+
+  def update_changeset(struct, params) do
+    struct
+    |> changeset(params)
+    |> cast(params, [:first_name, :last_name, :twitter, :biography, :website])
+    |> validate_format(:website, ~r/\A((http|https):\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(([0-9]{1,5})?\/.*)?#=\z/ix)
+    |> validate_format(:twitter, ~r/\A[a-zA-Z0-9_]{1,15}\z/)
   end
 
   defp put_pass_hash(changeset) do

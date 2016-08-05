@@ -7,10 +7,18 @@ defmodule CodeCorps.UserControllerTest do
   @valid_attrs %{
     email: "test@user.com",
     username: "testuser",
+    first_name: "John",
+    last_name: "Testie",
+    website: "www.example.com",
+    twitter: "testie",
+    biography: "A random dude"
   }
+
   @invalid_attrs %{
     email: "",
     username: "",
+    website: "---_<>-blank.com",
+    twitter: " @ testie"
   }
 
   setup do
@@ -91,7 +99,13 @@ defmodule CodeCorps.UserControllerTest do
 
     id = json_response(conn, 200)["data"]["id"]
     assert id
-    assert Repo.get(User, id)
+    user =  Repo.get(User, id)
+    assert user.username == "testuser"
+    assert user.email == "test@user.com"
+    assert user.first_name == "John"
+    assert user.last_name == "Testie"
+    assert user.website == "www.example.com"
+    assert user.biography == "A random dude"
   end
 
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do
@@ -106,7 +120,13 @@ defmodule CodeCorps.UserControllerTest do
       }
     }
 
-    assert json_response(conn, 422)["errors"] != %{}
+    json =  json_response(conn, 422)
+    assert json["errors"] != %{}
+    errors = json["errors"]
+    assert errors["email"] == ["can't be blank"]
+    assert errors["username"] == ["can't be blank"]
+    assert errors["twitter"] == ["has invalid format"]
+    assert errors["website"] == ["has invalid format"]
   end
 
   test "deletes chosen resource", %{conn: conn} do
